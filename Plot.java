@@ -15,6 +15,7 @@ public class Plot {
 	 */
 	public Plot(int treasure) {
 		this.treasure = treasure;
+		dugUp = false;
 	}
 
 	/**
@@ -36,5 +37,6 @@ public class Plot {
 	 */
 	public void excavate() {
 		dugUp = true;
+		treasure = 0;
 	}
 }

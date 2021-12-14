@@ -3,6 +3,8 @@
  * @author
  */
 public class Contest_Manager {
+	//Constants
+	private final int MAX_NUM_OF_TEAMS = 10;
 	// Instance variables
 	private Plot[][] plots;
 	private Team[] teams;
@@ -11,8 +13,31 @@ public class Contest_Manager {
 	/**
 	 * Contest Manager Constructor
 	 */
-	public Contest_Manager() {
-
+	public Contest_Manager(int[][] terrain) {
+		int lines = terrain.length;
+		int cols = terrain[0].length;
+		plots = new Plot[lines][cols];
+		for(int i = 0; i < lines; i++) {
+			for(int j = 0; j < cols; j++) {
+				plots[i][j] = new Plot(terrain[i][j]);
+			}
+		}
+		teams = new Team[MAX_NUM_OF_TEAMS];
+		size = 0;
+	}
+	
+	/**
+	 * Creates a team and adds it to the contest
+	 * @param teamName: the name that describes the team
+	 * @param memberNames: an array that displays each member's name
+	 */
+	public void addTeam(String teamName, String[] memberNames) {
+		Archeologist[] members = new Archeologist[memberNames.length];
+		for(int i = 0; i < members.length; i++) {
+			members[i] = new Archeologist(memberNames[i]);
+		}
+		teams[size] = new Team(members, teamName);
+		size++;
 	}
 
 	/**

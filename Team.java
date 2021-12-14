@@ -5,6 +5,7 @@
 public class Team {
 	// Instance variables
 	private Archeologist[] members;
+	private String teamName;
 	private int points;
 
 	/**
@@ -13,8 +14,9 @@ public class Team {
 	 * @param members: archeologist's from this team
 	 * @pre members != null
 	 */
-	public Team(Archeologist[] members) {
+	public Team(Archeologist[] members, String name) {
 		this.members = members;
+		teamName = name;
 		points = 0;
 	}
 

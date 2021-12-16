@@ -14,6 +14,7 @@ public class Archeologist {
 	private int posY;
 	private int merit;
 	private boolean license;
+	private int numPenalties;
 
 	/**
 	 * Archeologist Constructor
@@ -27,6 +28,7 @@ public class Archeologist {
 		posY = STARTING_POSY;
 		merit = STARTING_MERIT;
 		license = true;
+		numPenalties = 0;
 	}
 
 	/**
@@ -81,6 +83,7 @@ public class Archeologist {
 	 */
 	public void removeMerit(int meritLoss) {
 		merit -= meritLoss;
+		numPenalties++;
 	}
 
 	/**
@@ -93,7 +96,7 @@ public class Archeologist {
 	/**
 	 * @return true if Archeologist has a license, false if he doesn't
 	 */
-	public boolean getLicense() {
+	public boolean hasLicense() {
 		return license;
 	}
 
@@ -106,10 +109,28 @@ public class Archeologist {
 	}
 
 	/**
+	 * @return the number of penalties this archeologist commited
+	 */
+	public int getNumPenalties() {
+		return numPenalties;
+	}
+
+	/**
 	 * @return Archeologist's name
 	 */
 	public String getName() {
 		return name;
+	}
+
+	/**
+	 * Compares two names to see which is lexicographically bigger
+	 * 
+	 * @param other: other archeologist to compare to
+	 * @pre other != null
+	 * @return a positive int if this archeologist's name is lexicographically bigger than the other
+	 */
+	public int compareTo(Archeologist other) {
+		return name.compareTo(other.getName());
 	}
 
 }

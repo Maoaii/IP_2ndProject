@@ -83,10 +83,10 @@ public class Contest_Manager {
 
 		for (int row = 0; row < rows; row++) {
 			for (int col = 0; col < cols; col++) {
-				if (plots[row][col].getTreasure() == 0)
-					tmpTerrain[row][col] = false;
-				else
+				if (plots[row][col].getTreasure() > 0)
 					tmpTerrain[row][col] = true;
+				else
+					tmpTerrain[row][col] = false;
 			}
 		}
 
@@ -139,17 +139,22 @@ public class Contest_Manager {
 				arch.removeMerit(PENALTY * landedPlot.getTimesDugUp());
 			// If is inside terrain and has not been excavated
 				// Gain merit based on treasure on plot
-			else
+			else {
 				arch.addMerit(landedPlot.getTreasure());
+				landedPlot.excavate();
+			}
 		}	
 	}
 
 	private boolean isOutOfBounds(int leapY, int leapX, Archeologist arch) {
 		int cols = plots[0].length;
 		int rows = plots.length;
-
-		if (arch.getPosX() + leapX > cols || arch.getPosX() + leapX < 0
-				|| arch.getPosY() + leapY > rows || arch.getPosY() + leapY < 0)
+		int help1 = arch.getPosY() + leapY;
+		boolean help = arch.getPosY() + leapY > rows;
+		
+		
+		if (arch.getPosX() + leapX >= cols || arch.getPosX() + leapX < 0
+				|| arch.getPosY() + leapY >= rows || arch.getPosY() + leapY < 0)
 			return true;
 		
 		return false;
@@ -163,7 +168,7 @@ public class Contest_Manager {
 	private int getTeamIndex(String teamName) {
 		int teamIndex = 0;
 		boolean found = false;
-		while (!found && teamIndex < teams.length) {
+		while (!found && teamIndex < size) {
 			if (teams[teamIndex].getName().equals(teamName)) {
 				found = true;
 			}
@@ -181,7 +186,7 @@ public class Contest_Manager {
 	 * @return true if name matches a team name
 	 */
 	public boolean doesTeamExist(String name) {
-		for (int team = 0; team < teams.length; team++) {
+		for (int team = 0; team < size; team++) {
 			if (teams[team].getName().equals(name))
 				return true;
 		}
@@ -205,12 +210,12 @@ public class Contest_Manager {
 	public boolean areTeamsDisqualified() {
 		int teamsDisqualified = 0;
 		
-		for (int team = 0; team < teams.length; team++) {
+		for (int team = 0; team < size; team++) {
 			if (isTeamDisqualified(teams[team].getName()))
 				teamsDisqualified++;
 		}
 		
-		if (teamsDisqualified == teams.length)
+		if (teamsDisqualified == size)
 			return true;
 		else
 			return false;

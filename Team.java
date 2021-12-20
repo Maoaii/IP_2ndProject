@@ -27,7 +27,7 @@ public class Team {
 		}
 		currentArchIndex = FIRST;
 	}
-	
+
 	/**
 	 * Gets the next archeologist who is going to dig, skips any that doesn't have a license
 	 * 
@@ -36,21 +36,19 @@ public class Team {
 	 */
 	public Archeologist getCurrentArch() {
 		Archeologist arch;
-		do{
+		do {
 			arch = members[currentArchIndex];
-			if(currentArchIndex < members.length){
+			if (currentArchIndex < members.length - 1) {
 				currentArchIndex++;
-			}
-			else{
+			} else {
 				currentArchIndex = FIRST;
 			}
-		}while(!arch.hasLicense());
+		} while (!arch.hasLicense());
 		return arch;
 	}
-	
 
 	/**
-	 *gets the team's name
+	 * gets the team's name
 	 *
 	 * @return the team's name
 	 */
@@ -59,7 +57,7 @@ public class Team {
 	}
 
 	/**
-	 *gets the number of archeologists that still have a license
+	 * gets the number of archeologists that still have a license
 	 *
 	 * @return the number of archeologists with a valid license
 	 */
@@ -68,7 +66,7 @@ public class Team {
 	}
 
 	/**
-	 *gets the number of archeologists that have lost their license
+	 * gets the number of archeologists that have lost their license
 	 *
 	 * @return the total of archeologists without a license on this team
 	 */
@@ -99,14 +97,14 @@ public class Team {
 	 */
 	private Archeologist[] sortMembers() {
 		Archeologist[] tmpMembers = new Archeologist[members.length];
-		
+
 		for (int member = 0; member < members.length; member++) {
 			tmpMembers[member] = members[member];
 		}
-		
+
 		for (int arch1 = 0; arch1 < members.length - 1; arch1++) {
-			for(int arch2 = arch1 + 1; arch2 < members.length; arch2++){
-				if(tmpMembers[arch1].isBehind(tmpMembers[arch2])){
+			for (int arch2 = arch1 + 1; arch2 < members.length; arch2++) {
+				if (tmpMembers[arch1].isBehind(tmpMembers[arch2])) {
 					Archeologist tmp = tmpMembers[arch1];
 					tmpMembers[arch1] = tmpMembers[arch2];
 					tmpMembers[arch2] = tmp;
@@ -117,7 +115,7 @@ public class Team {
 	}
 
 	/**
-	 *Calculates the team score by adding the merit of each member together
+	 * Calculates the team score by adding the merit of each member together
 	 *
 	 * @return the team's score
 	 */

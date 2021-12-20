@@ -39,6 +39,7 @@ public class Archeologist {
 	 */
 	public void updateXPos(int leap) {
 		posX += leap;
+		System.out.println("X: " + posX);
 	}
 
 	/**
@@ -49,9 +50,12 @@ public class Archeologist {
 	 */
 	public void updateYPos(int leap) {
 		posY += leap;
+		System.out.println("Y: " + posY);
 	}
 
 	/**
+	 *updates the X position on the terrain
+	 *
 	 * @return position on x-axis
 	 */
 	public int getPosX() {
@@ -59,6 +63,8 @@ public class Archeologist {
 	}
 
 	/**
+	 *updates the Y position on the terrain
+	 *
 	 * @return position on y-axis
 	 */
 	public int getPosY() {
@@ -87,6 +93,8 @@ public class Archeologist {
 	}
 
 	/**
+	 *gets the archeologist's merit'
+	 *
 	 * @return Archeologist's merit
 	 */
 	public int getMerit() {
@@ -94,6 +102,8 @@ public class Archeologist {
 	}
 
 	/**
+	 *Checks if the archeologist has license
+	 *
 	 * @return true if Archeologist has a license, false if he doesn't
 	 */
 	public boolean hasLicense() {
@@ -109,6 +119,8 @@ public class Archeologist {
 	}
 
 	/**
+	 *Gtes how many times this archeologist has been penalized
+	 *
 	 * @return the number of penalties this archeologist commited
 	 */
 	public int getNumPenalties() {
@@ -116,6 +128,8 @@ public class Archeologist {
 	}
 
 	/**
+	 *Gets the archeologist's name
+	 *
 	 * @return Archeologist's name
 	 */
 	public String getName() {
@@ -123,14 +137,30 @@ public class Archeologist {
 	}
 
 	/**
-	 * Compares two names to see which is lexicographically bigger
+	 * Compares two archeologists to see which one is doing better in the contest
 	 * 
 	 * @param other: other archeologist to compare to
 	 * @pre other != null
-	 * @return a positive int if this archeologist's name is lexicographically bigger than the other
+	 * @return true if the other one is better, otherwise it is false
 	 */
-	public int compareTo(Archeologist other) {
-		return name.compareTo(other.getName());
+	public boolean isBehind(Archeologist other){
+		if(merit < other.getMerit()){
+			return true;
+		}
+		else if(merit > other.getMerit()){
+			return false;
+		}
+		else{
+			if(numPenalties > other.getNumPenalties()){
+				return true;
+			}
+			else if(numPenalties < other.getNumPenalties()){
+				return false;
+			}
+			else{
+				return name.compareTo(other.getName()) > 0;
+			}
+		}
 	}
 
 }

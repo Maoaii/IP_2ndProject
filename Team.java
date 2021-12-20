@@ -9,6 +9,7 @@ public class Team {
 	// Instance variables
 	private Archeologist[] members;
 	private String teamName;
+	private int currentArchIndex;
 
 	/**
 	 * Team Constructor
@@ -24,9 +25,33 @@ public class Team {
 		for (int i = 0; i < members.length; i++) {
 			System.out.println(members[i].getName());
 		}
+		currentArchIndex = FIRST;
 	}
+	
+	/**
+	 * Gets the next archeologist who is going to dig, skips any that doesn't have a license
+	 * 
+	 * @pre at least one member has license
+	 * @return the archeologist whose turn to dig is next
+	 */
+	public Archeologist getCurrentArch() {
+		Archeologist arch;
+		do{
+			arch = members[currentArchIndex];
+			if(currentArchIndex < members.length){
+				currentArchIndex++;
+			}
+			else{
+				currentArchIndex = FIRST;
+			}
+		}while(!arch.hasLicense());
+		return arch;
+	}
+	
 
 	/**
+	 *gets the team's name
+	 *
 	 * @return the team's name
 	 */
 	public String getName() {
@@ -34,6 +59,8 @@ public class Team {
 	}
 
 	/**
+	 *gets the number of archeologists that still have a license
+	 *
 	 * @return the number of archeologists with a valid license
 	 */
 	public int getNumArchLicensed() {
@@ -41,6 +68,8 @@ public class Team {
 	}
 
 	/**
+	 *gets the number of archeologists that have lost their license
+	 *
 	 * @return the total of archeologists without a license on this team
 	 */
 	public int getNumArchNotLicensed() {
@@ -70,24 +99,17 @@ public class Team {
 	 */
 	private Archeologist[] sortMembers() {
 		Archeologist[] tmpMembers = new Archeologist[members.length];
-		tmpMembers = members;
-		for (int arch = 0; arch < members.length; arch++) {
-			if (tmpMembers[arch].getMerit() < tmpMembers[arch + 1].getMerit()) {
-				Archeologist tmp = tmpMembers[arch];
-				tmpMembers[arch] = tmpMembers[arch + 1];
-				tmpMembers[arch + 1] = tmp;
-			} else if (tmpMembers[arch].getMerit() == tmpMembers[arch + 1].getMerit()) {
-				if (tmpMembers[arch].getNumPenalties() < tmpMembers[arch + 1].getNumPenalties()) {
-					Archeologist tmp = tmpMembers[arch];
-					tmpMembers[arch] = tmpMembers[arch + 1];
-					tmpMembers[arch + 1] = tmp;
-				} else if (tmpMembers[arch].getNumPenalties() == tmpMembers[arch + 1]
-						.getNumPenalties()) {
-					if (tmpMembers[arch].compareTo(tmpMembers[arch + 1]) > 0) {
-						Archeologist tmp = tmpMembers[arch];
-						tmpMembers[arch] = tmpMembers[arch + 1];
-						tmpMembers[arch + 1] = tmp;
-					}
+		
+		for (int member = 0; member < members.length; member++) {
+			tmpMembers[member] = members[member];
+		}
+		
+		for (int arch1 = 0; arch1 < members.length - 1; arch1++) {
+			for(int arch2 = arch1 + 1; arch2 < members.length; arch2++){
+				if(tmpMembers[arch1].isBehind(tmpMembers[arch2])){
+					Archeologist tmp = tmpMembers[arch1];
+					tmpMembers[arch1] = tmpMembers[arch2];
+					tmpMembers[arch2] = tmp;
 				}
 			}
 		}
@@ -95,6 +117,8 @@ public class Team {
 	}
 
 	/**
+	 *Calculates the team score by adding the merit of each member together
+	 *
 	 * @return the team's score
 	 */
 	public int getScore() {

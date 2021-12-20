@@ -28,10 +28,7 @@ public class Main {
 	private static final String ALL_DUG_UP = "Todos os tesouros foram descobertos!";
 	private static final String TREASURE_LEFT = "Ainda havia tesouros por descobrir...";
 	private static final String INVALID_COMMAND = "Comando invalido";
-	private static final String ARQ_DISQUALIFIED = "Arqueologo desclassificado";
-	private static final String ARQ_DOESNT_EXIST = "Arqueologo inexistente";
 	private static final String INVALID_LEAP = "Salto invalido";
-	private static final String LOST_LICENSE = " perdeu a licenca de escavacao";
 	private static final String TREASURE = "*";
 	private static final String NO_TREASURE = "-";
 
@@ -48,7 +45,7 @@ public class Main {
 		// Start the contest loop
 		String command;
 		do {
-			command = in.nextLine();
+			command = in.next();
 			interpretCommands(command, in, manager);
 		} while (!command.equals(COMMAND_QUIT));
 
@@ -151,16 +148,34 @@ public class Main {
 	private static void handleStarCommand(Contest_Manager manager, Scanner in) {
 		String teamName = in.nextLine().trim();
 		if (manager.doesTeamExist(teamName))
-			System.out.printf(STAR_MESSAGE, manager.computeTeamStar(teamName));
+			System.out.printf(STAR_MESSAGE, teamName, manager.computeTeamStar(teamName));
 		else
 			System.out.println(INVALID_TEAM);
 	}
 
 	/**
+	 * Passes the information of a excavation request to the system. Prints out two different error
+	 * messages, depending if the leap or the team name is invalid
 	 * 
+	 * @param manager: system that handles the logic
+	 * @param in:      console input reader
+	 * @pre manager != null && in != null
 	 */
 	private static void handleExcavationCommand(Contest_Manager manager, Scanner in) {
-		
+		int leapY = in.nextInt();
+		int leapX = in.nextInt();
+		String teamName = in.nextLine().trim();
+
+		if (leapY == 0 && leapX == 0)
+			System.out.println(INVALID_LEAP);
+		else if (!manager.doesTeamExist(teamName) || manager.isTeamDisqualified(teamName))
+			System.out.println(INVALID_TEAM);
+		else
+			manager.computeExcavation(leapY, leapX, teamName);
+
+		if (manager.isTeamDisqualified(teamName))
+			System.out.printf(TEAM_DISQUALIFIED, teamName);
+
 	}
 
 	/**

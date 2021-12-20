@@ -5,6 +5,7 @@
 public class Contest_Manager {
 	// Constants
 	private static final int MAX_NUM_OF_TEAMS = 10;
+	private static final int PENALTY = 10;
 
 	// Instance variables
 	private Plot[][] plots;
@@ -93,15 +94,6 @@ public class Contest_Manager {
 	}
 
 	/**
-	 * Computes the logic behind displaying the contest classification
-	 * 
-	 * @return a string with the current classification of the contest
-	 */
-	public String computeClassification() {
-		return "";
-	}
-
-	/**
 	 * Computes the logic behind checking who's the team star
 	 * 
 	 * @param name: team name to search in
@@ -109,24 +101,76 @@ public class Contest_Manager {
 	 * @return the name of a certain team's star
 	 */
 	public String computeTeamStar(String name) {
-		String starName = "";
-		int team = 0;
-		boolean found = false;
-
-		while (!found) {
-			if (teams[team].getName().equals(name)) {
-				found = true;
-				starName = teams[team].getTeamStar();
-			}
-		}
-		return starName;
+		return teams[getTeamIndex(name)].getTeamStar();
 	}
 
 	/**
-	 * Computes the excavation of an archeologist
+	 * * Computes the excavation of an archeologist
+	 * 
+	 * @param leapY:    archeologist movement on Y-axis
+	 * @param leapX:    archeologist movement on X-axis
+	 * @param teamName: name of the team that'll excavate
+	 * @pre leapY != null && leapX != null && teamName != null
 	 */
-	public void computeExcavation() {
+	public void computeExcavation(int leapY, int leapX, String teamName) {
 
+		// Check which archeologist will make the excavation
+		// Based on order in team and license
+		Archeologist arch = teams[getTeamIndex(teamName)].getCurrentArch();
+
+		// Compute the excavation
+
+		// If arch gets out of the terrain
+			// Lose license
+		if (isOutOfBounds(leapY, leapX, arch)) {
+			arch.removeLicense();
+		}
+		else {
+			// Update position
+			arch.updateXPos(leapX);
+			arch.updateYPos(leapY);
+			
+			// Get plot the arch landed on
+			Plot landedPlot = plots[arch.getPosY()][arch.getPosX()];
+			
+			// If is inside terrain and has been excavated
+				// Lose merit based on how many times plot has been excavated
+			if (landedPlot.isDugUp())
+				arch.removeMerit(PENALTY * landedPlot.getTimesDugUp());
+			// If is inside terrain and has not been excavated
+				// Gain merit based on treasure on plot
+			else
+				arch.addMerit(landedPlot.getTreasure());
+		}	
+	}
+
+	private boolean isOutOfBounds(int leapY, int leapX, Archeologist arch) {
+		int cols = plots[0].length;
+		int rows = plots.length;
+
+		if (arch.getPosX() + leapX > cols || arch.getPosX() + leapX < 0
+				|| arch.getPosY() + leapY > rows || arch.getPosY() + leapY < 0)
+			return true;
+		
+		return false;
+	}
+
+	/**
+	 * @param teamName: name of the team to look for
+	 * @pre teamName != null
+	 * @return the index of the team
+	 */
+	private int getTeamIndex(String teamName) {
+		int teamIndex = 0;
+		boolean found = false;
+		while (!found && teamIndex < teams.length) {
+			if (teams[teamIndex].getName().equals(teamName)) {
+				found = true;
+			}
+			else
+				teamIndex++;
+		}
+		return teamIndex;
 	}
 
 	/**
@@ -143,6 +187,15 @@ public class Contest_Manager {
 		}
 		return false;
 	}
+	
+	/**
+	 * @param teamName: team to check if is disqualified
+	 * @pre teamName != null
+	 * @return true if there are not archeologists with license on this team
+	 */
+	public boolean isTeamDisqualified(String teamName) {
+		return teams[getTeamIndex(teamName)].getNumArchLicensed() == 0;
+	}
 
 	/**
 	 * Checks if all the teams are disqualified
@@ -150,7 +203,17 @@ public class Contest_Manager {
 	 * @return true if all the teams are disqualified
 	 */
 	public boolean areTeamsDisqualified() {
-		return false;
+		int teamsDisqualified = 0;
+		
+		for (int team = 0; team < teams.length; team++) {
+			if (isTeamDisqualified(teams[team].getName()))
+				teamsDisqualified++;
+		}
+		
+		if (teamsDisqualified == teams.length)
+			return true;
+		else
+			return false;
 	}
 
 	/**

@@ -135,8 +135,11 @@ public class Contest_Manager {
 			
 			// If is inside terrain and has been excavated
 				// Lose merit based on how many times plot has been excavated
-			if (landedPlot.isDugUp())
+			if (landedPlot.isDugUp()) {
 				arch.removeMerit(PENALTY * landedPlot.getTimesDugUp());
+				landedPlot.excavate();
+			}
+				
 			// If is inside terrain and has not been excavated
 				// Gain merit based on treasure on plot
 			else {
@@ -149,9 +152,6 @@ public class Contest_Manager {
 	private boolean isOutOfBounds(int leapY, int leapX, Archeologist arch) {
 		int cols = plots[0].length;
 		int rows = plots.length;
-		int help1 = arch.getPosY() + leapY;
-		boolean help = arch.getPosY() + leapY > rows;
-		
 		
 		if (arch.getPosX() + leapX >= cols || arch.getPosX() + leapX < 0
 				|| arch.getPosY() + leapY >= rows || arch.getPosY() + leapY < 0)

@@ -24,7 +24,7 @@ public class Main {
 	private static final String CLASSIFICATION_MESSAGE = "%s: %d pts; %d descl.; %d com lic.\n";
 	private static final String INVALID_TEAM = "Equipa invalida";
 	private static final String STAR_MESSAGE = "Estrela de %s: %s\n";
-	private static final String TEAM_DISQUALIFIED = "%s foi expulsa";
+	private static final String TEAM_DISQUALIFIED = "%s foi expulsa\n";
 	private static final String ALL_DUG_UP = "Todos os tesouros foram descobertos!";
 	private static final String TREASURE_LEFT = "Ainda havia tesouros por descobrir...";
 	private static final String INVALID_COMMAND = "Comando invalido";
@@ -134,7 +134,11 @@ public class Main {
 			int score = team.getScore();
 			int nNotLic = team.getNumArchNotLicensed();
 			int nLic = team.getNumArchLicensed();
-			System.out.printf(CLASSIFICATION_MESSAGE, name, score, nNotLic, nLic);
+			if (manager.areTeamsDisqualified())
+				System.out.println(ALL_TEAMS_DISQUALIFIED);
+			else
+				System.out.printf(CLASSIFICATION_MESSAGE, name, score, nNotLic, nLic);
+
 		}
 	}
 
@@ -147,7 +151,7 @@ public class Main {
 	 */
 	private static void handleStarCommand(Contest_Manager manager, Scanner in) {
 		String teamName = in.nextLine().trim();
-		if (manager.doesTeamExist(teamName))
+		if (manager.doesTeamExist(teamName) && !manager.isTeamDisqualified(teamName))
 			System.out.printf(STAR_MESSAGE, teamName, manager.computeTeamStar(teamName));
 		else
 			System.out.println(INVALID_TEAM);
@@ -168,13 +172,16 @@ public class Main {
 
 		if (leapY == 0 && leapX == 0)
 			System.out.println(INVALID_LEAP);
-		else if (!manager.doesTeamExist(teamName) || manager.isTeamDisqualified(teamName))
+		else if (!manager.doesTeamExist(teamName))
 			System.out.println(INVALID_TEAM);
-		else
+		else if (manager.isTeamDisqualified(teamName))
+			System.out.println(INVALID_TEAM);
+		else {
 			manager.computeExcavation(leapY, leapX, teamName);
 
-		if (manager.isTeamDisqualified(teamName))
-			System.out.printf(TEAM_DISQUALIFIED, teamName);
+			if (manager.isTeamDisqualified(teamName))
+				System.out.printf(TEAM_DISQUALIFIED, teamName);
+		}
 
 	}
 

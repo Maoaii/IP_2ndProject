@@ -83,6 +83,7 @@ public class Main {
 			break;
 		default:
 			System.out.println(INVALID_COMMAND);
+			in.nextLine();
 			break;
 		}
 	}
@@ -126,7 +127,13 @@ public class Main {
 	 * @param manager: system that handles the logic
 	 * @pre manager != null
 	 */
+	
+	//TODO: VER SE ISTO AGORA FUNCIONA
 	private static void handleClassificationCommand(Contest_Manager manager) {
+		if (manager.areTeamsDisqualified()) {
+			System.out.println(ALL_TEAMS_DISQUALIFIED);
+			return;
+		}
 		Classification_Iterator it = manager.scoreIterator();
 		while (it.hasNext()) {
 			Team team = it.next();
@@ -134,10 +141,7 @@ public class Main {
 			int score = team.getScore();
 			int nNotLic = team.getNumArchNotLicensed();
 			int nLic = team.getNumArchLicensed();
-			if (manager.areTeamsDisqualified())
-				System.out.println(ALL_TEAMS_DISQUALIFIED);
-			else
-				System.out.printf(CLASSIFICATION_MESSAGE, name, score, nNotLic, nLic);
+			System.out.printf(CLASSIFICATION_MESSAGE, name, score, nNotLic, nLic);
 
 		}
 	}
@@ -245,7 +249,7 @@ public class Main {
 				String teamName = file.nextLine().trim();
 				String[] memberNames = new String[numMembers];
 				for (int member = 0; member < numMembers; member++) {
-					memberNames[member] = file.nextLine();
+					memberNames[member] = file.nextLine().trim();
 				}
 				manager.addTeam(teamName, memberNames);
 				arrayIndex++;

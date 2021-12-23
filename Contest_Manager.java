@@ -23,13 +23,10 @@ public class Contest_Manager {
 		int cols = terrain[0].length;
 		plots = new Plot[lines][cols];
 
-		System.out.println("Terrain: ");
 		for (int row = 0; row < lines; row++) {
 			for (int col = 0; col < cols; col++) {
 				plots[row][col] = new Plot(terrain[row][col]);
-				System.out.print(plots[row][col].getTreasure());
 			}
-			System.out.println();
 		}
 
 		teams = new Team[MAX_NUM_OF_TEAMS];
@@ -124,9 +121,11 @@ public class Contest_Manager {
 			// Lose license
 		if (isOutOfBounds(leapY, leapX, arch)) {
 			arch.removeLicense();
+			
 			if(teams[getTeamIndex(teamName)].getNumArchLicensed() == 0) {
 				removeTeam(teamName);
 			}
+			
 		}
 		else {
 			// Update position
@@ -153,17 +152,15 @@ public class Contest_Manager {
 	}
 	
 	private void removeTeam(String teamName) {
-		Team[] newTeams = new Team[MAX_NUM_OF_TEAMS];
 		int removedIndex = getTeamIndex(teamName);
-		for(int index = 0; index < removedIndex; index++) {
-			newTeams[index] = teams[index];
+		for (int index = removedIndex; index < size - 1; index++) {
+			teams[index] = teams[index + 1];
 		}
 		size--;
-		for(int index = removedIndex; index < size; index++) {
-			newTeams[index] = teams[index + 1];
-		}
-		teams = newTeams;
+		
+		
 	}
+	
 
 	private boolean isOutOfBounds(int leapY, int leapX, Archeologist arch) {
 		int cols = plots[0].length;
@@ -221,13 +218,13 @@ public class Contest_Manager {
 	/**
 	 * Sorts the teams based on their score
 	 */
-	private void updateScore() {
+	private void updateScore(Team[] tmpTeams) {
 		for (int team = 0; team < size - 1; team++) {
 			for (int other = 1; other < size; other++) {
-				if (teams[team].goesAfter(teams[other])) {
-					Team tmp = teams[team];
-					teams[team] = teams[other];
-					teams[other] = tmp;
+				if (tmpTeams[team].goesAfter(tmpTeams[other])) {
+					Team tmp = tmpTeams[team];
+					tmpTeams[team] = tmpTeams[other];
+					tmpTeams[other] = tmp;
 				}
 			}
 		}
@@ -239,8 +236,12 @@ public class Contest_Manager {
 	 * @return a scoreIterator
 	 */
 	public Classification_Iterator scoreIterator() {
-		updateScore();
-		return new Classification_Iterator(teams, size);
+		Team[] tmpTeams = new Team[MAX_NUM_OF_TEAMS];
+		for (int team = 0; team < size; team++) {
+			tmpTeams[team] = teams[team];
+		}
+		updateScore(tmpTeams);
+		return new Classification_Iterator(tmpTeams, size);
 	}
 
 }

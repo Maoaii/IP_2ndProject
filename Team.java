@@ -21,9 +21,7 @@ public class Team {
 	public Team(Archeologist[] members, String name) {
 		this.members = members;
 		teamName = name;
-		System.out.println(name);
 		for (int i = 0; i < members.length; i++) {
-			System.out.println(members[i].getName());
 		}
 		currentArchIndex = FIRST;
 	}

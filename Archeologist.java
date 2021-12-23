@@ -39,7 +39,6 @@ public class Archeologist {
 	 */
 	public void updateXPos(int leap) {
 		posX += leap;
-		System.out.println("X: " + posX);
 	}
 
 	/**
@@ -50,7 +49,6 @@ public class Archeologist {
 	 */
 	public void updateYPos(int leap) {
 		posY += leap;
-		System.out.println("Y: " + posY);
 	}
 
 	/**

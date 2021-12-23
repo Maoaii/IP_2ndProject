@@ -262,7 +262,7 @@ public class Main {
 	}
 
 	/**
-	 * Reads and returns an int from the console
+	 * Reads and returns an int and skips the line
 	 * 
 	 * @param in: console input reader
 	 * @return an int read from console

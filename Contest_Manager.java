@@ -153,10 +153,11 @@ public class Contest_Manager {
 	
 	private void removeTeam(String teamName) {
 		int removedIndex = getTeamIndex(teamName);
-		for (int index = removedIndex; index < size - 1; index++) {
+		size--;
+		for (int index = removedIndex; index < size; index++) {
 			teams[index] = teams[index + 1];
 		}
-		size--;
+		teams[size] = null;
 		
 		
 	}

@@ -124,6 +124,9 @@ public class Contest_Manager {
 			// Lose license
 		if (isOutOfBounds(leapY, leapX, arch)) {
 			arch.removeLicense();
+			if(teams[getTeamIndex(teamName)].getNumArchLicensed() == 0) {
+				removeTeam(teamName);
+			}
 		}
 		else {
 			// Update position
@@ -148,6 +151,19 @@ public class Contest_Manager {
 			}
 		}	
 	}
+	
+	private void removeTeam(String teamName) {
+		Team[] newTeams = new Team[MAX_NUM_OF_TEAMS];
+		int removedIndex = getTeamIndex(teamName);
+		for(int index = 0; index < removedIndex; index++) {
+			newTeams[index] = teams[index];
+		}
+		size--;
+		for(int index = removedIndex; index < size; index++) {
+			newTeams[index] = teams[index + 1];
+		}
+		teams = newTeams;
+	}
 
 	private boolean isOutOfBounds(int leapY, int leapX, Archeologist arch) {
 		int cols = plots[0].length;
@@ -162,7 +178,7 @@ public class Contest_Manager {
 
 	/**
 	 * @param teamName: name of the team to look for
-	 * @pre teamName != null
+	 * @pre doesTeamExist()
 	 * @return the index of the team
 	 */
 	private int getTeamIndex(String teamName) {
@@ -192,15 +208,6 @@ public class Contest_Manager {
 		}
 		return false;
 	}
-	
-	/**
-	 * @param teamName: team to check if is disqualified
-	 * @pre teamName != null
-	 * @return true if there are not archeologists with license on this team
-	 */
-	public boolean isTeamDisqualified(String teamName) {
-		return teams[getTeamIndex(teamName)].getNumArchLicensed() == 0;
-	}
 
 	/**
 	 * Checks if all the teams are disqualified
@@ -208,17 +215,7 @@ public class Contest_Manager {
 	 * @return true if all the teams are disqualified
 	 */
 	public boolean areTeamsDisqualified() {
-		int teamsDisqualified = 0;
-		
-		for (int team = 0; team < size; team++) {
-			if (isTeamDisqualified(teams[team].getName()))
-				teamsDisqualified++;
-		}
-		
-		if (teamsDisqualified == size)
-			return true;
-		else
-			return false;
+		return size == 0;
 	}
 
 	/**

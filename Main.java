@@ -151,7 +151,7 @@ public class Main {
 	 */
 	private static void handleStarCommand(Contest_Manager manager, Scanner in) {
 		String teamName = in.nextLine().trim();
-		if (manager.doesTeamExist(teamName) && !manager.isTeamDisqualified(teamName))
+		if (manager.doesTeamExist(teamName))
 			System.out.printf(STAR_MESSAGE, teamName, manager.computeTeamStar(teamName));
 		else
 			System.out.println(INVALID_TEAM);
@@ -174,12 +174,11 @@ public class Main {
 			System.out.println(INVALID_LEAP);
 		else if (!manager.doesTeamExist(teamName))
 			System.out.println(INVALID_TEAM);
-		else if (manager.isTeamDisqualified(teamName))
-			System.out.println(INVALID_TEAM);
+
 		else {
 			manager.computeExcavation(leapY, leapX, teamName);
 
-			if (manager.isTeamDisqualified(teamName))
+			if (!manager.doesTeamExist(teamName))
 				System.out.printf(TEAM_DISQUALIFIED, teamName);
 		}
 

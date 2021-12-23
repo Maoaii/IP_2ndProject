@@ -1,6 +1,6 @@
 /**
  * 
- * @author
+ * @author 
  */
 public class Archeologist {
 	// Constants
@@ -144,6 +144,9 @@ public class Archeologist {
 	 * @return true if the other one is better, otherwise it is false
 	 */
 	public boolean isBehind(Archeologist other){
+		if(!hasLicense()) {
+			return true;
+		}
 		if(merit < other.getMerit()){
 			return true;
 		}

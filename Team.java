@@ -84,7 +84,12 @@ public class Team {
 	 * @return the name of this team's star
 	 */
 	public String getTeamStar() {
-		Archeologist[] sortedMembers = sortMembers();
+		
+		Archeologist[] sortedMembers = new Archeologist[members.length];
+		for (int member = 0; member < members.length; member++) {
+			sortedMembers[member] = members[member];
+		}
+		sortMembers(sortedMembers);
 		return sortedMembers[FIRST].getName();
 	}
 
@@ -93,23 +98,16 @@ public class Team {
 	 * 
 	 * @return a sorted archeologist array
 	 */
-	private Archeologist[] sortMembers() {
-		Archeologist[] tmpMembers = new Archeologist[members.length];
-
-		for (int member = 0; member < members.length; member++) {
-			tmpMembers[member] = members[member];
-		}
-
-		for (int arch1 = 0; arch1 < members.length - 1; arch1++) {
-			for (int arch2 = arch1 + 1; arch2 < members.length; arch2++) {
-				if (tmpMembers[arch1].isBehind(tmpMembers[arch2])) {
-					Archeologist tmp = tmpMembers[arch1];
-					tmpMembers[arch1] = tmpMembers[arch2];
-					tmpMembers[arch2] = tmp;
+	private void sortMembers(Archeologist[] sortedMembers) {
+		for (int i = 1; i < members.length; i++) {
+			for (int j = members.length - 1; j >= i; j--) {
+				if (sortedMembers[j - 1].isBehind(sortedMembers[j])) {
+					Archeologist tmp = sortedMembers[j - 1];
+					sortedMembers[j - 1] = sortedMembers[j];
+					sortedMembers[j] = tmp;
 				}
 			}
 		}
-		return tmpMembers;
 	}
 
 	/**

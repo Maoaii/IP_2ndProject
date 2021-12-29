@@ -153,11 +153,10 @@ public class Contest_Manager {
 	
 	private void removeTeam(String teamName) {
 		int removedIndex = getTeamIndex(teamName);
-		size--;
-		for (int index = removedIndex; index < size; index++) {
+		for (int index = removedIndex; index < size - 1; index++) {
 			teams[index] = teams[index + 1];
 		}
-		teams[size] = null;
+		size--;
 		
 		
 	}
@@ -220,12 +219,12 @@ public class Contest_Manager {
 	 * Sorts the teams based on their score
 	 */
 	private void updateScore(Team[] tmpTeams) {
-		for (int team = 0; team < size - 1; team++) {
-			for (int other = 1; other < size; other++) {
-				if (tmpTeams[team].goesAfter(tmpTeams[other])) {
-					Team tmp = tmpTeams[team];
-					tmpTeams[team] = tmpTeams[other];
-					tmpTeams[other] = tmp;
+		for (int i = 1; i < size; i++) {
+			for (int j = size - 1; j >= i; j--) {
+				if (tmpTeams[j - 1].goesAfter(tmpTeams[j])) {
+					Team tmp = tmpTeams[j - 1];
+					tmpTeams[j - 1] = tmpTeams[j];
+					tmpTeams[j] = tmp;
 				}
 			}
 		}

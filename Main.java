@@ -127,8 +127,6 @@ public class Main {
 	 * @param manager: system that handles the logic
 	 * @pre manager != null
 	 */
-	
-	//TODO: VER SE ISTO AGORA FUNCIONA
 	private static void handleClassificationCommand(Contest_Manager manager) {
 		if (manager.areTeamsDisqualified()) {
 			System.out.println(ALL_TEAMS_DISQUALIFIED);

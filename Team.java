@@ -86,6 +86,7 @@ public class Team {
 	public String getTeamStar() {
 		
 		Archeologist[] sortedMembers = new Archeologist[members.length];
+		
 		for (int member = 0; member < members.length; member++) {
 			sortedMembers[member] = members[member];
 		}

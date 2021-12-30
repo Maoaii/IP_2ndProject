@@ -182,9 +182,8 @@ public class Contest_Manager {
 		int teamIndex = 0;
 		boolean found = false;
 		while (!found && teamIndex < size) {
-			if (teams[teamIndex].getName().equals(teamName)) {
+			if (teams[teamIndex].getName().equals(teamName))
 				found = true;
-			}
 			else
 				teamIndex++;
 		}

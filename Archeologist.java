@@ -142,8 +142,11 @@ public class Archeologist {
 	 * @return true if the other one is better, otherwise it is false
 	 */
 	public boolean isBehind(Archeologist other){
-		if(!hasLicense()) {
+		if(!this.hasLicense()) {
 			return true;
+		}
+		if(!other.hasLicense()) {
+			return false;
 		}
 		if(merit < other.getMerit()){
 			return true;

@@ -1,8 +1,11 @@
 /**
+ * Class regarding a single Archeologist. Holds all its' information, like current position, merit,
+ * number of penalties, license and name
  * 
- * @author 
+ * @author Lucas Girotto and Pedro
  */
 public class Archeologist {
+
 	// Constants
 	private static final int STARTING_POSX = -1; // "-1" because plots begin at "0"
 	private static final int STARTING_POSY = -1; // "-1" because plots begin at "0"
@@ -52,18 +55,14 @@ public class Archeologist {
 	}
 
 	/**
-	 *updates the X position on the terrain
-	 *
-	 * @return position on x-axis
+	 * @return arch position on x-axis
 	 */
 	public int getPosX() {
 		return posX;
 	}
 
 	/**
-	 *updates the Y position on the terrain
-	 *
-	 * @return position on y-axis
+	 * @return arch position on y-axis
 	 */
 	public int getPosY() {
 		return posY;
@@ -91,16 +90,14 @@ public class Archeologist {
 	}
 
 	/**
-	 *gets the archeologist's merit'
-	 *
-	 * @return Archeologist's merit
+	 * @return arch's merit
 	 */
 	public int getMerit() {
 		return merit;
 	}
 
 	/**
-	 *Checks if the archeologist has license
+	 * Checks if the archeologist has license
 	 *
 	 * @return true if Archeologist has a license, false if he doesn't
 	 */
@@ -109,16 +106,15 @@ public class Archeologist {
 	}
 
 	/**
-	 * Removes Archeologists license and sets his merit to 0
+	 * Removes Archeologists license and sets his merit and number of penalties to 0
 	 */
 	public void removeLicense() {
 		license = false;
 		merit = 0;
+		numPenalties = 0;
 	}
 
 	/**
-	 *Gtes how many times this archeologist has been penalized
-	 *
 	 * @return the number of penalties this archeologist commited
 	 */
 	public int getNumPenalties() {
@@ -126,8 +122,6 @@ public class Archeologist {
 	}
 
 	/**
-	 *Gets the archeologist's name
-	 *
 	 * @return Archeologist's name
 	 */
 	public String getName() {
@@ -135,36 +129,38 @@ public class Archeologist {
 	}
 
 	/**
-	 * Compares two archeologists to see which one is doing better in the contest
+	 * Compares two archeologists to see which one is doing better in the contest, based on
+	 * licenses, merit and number of penalties. If all the same, whoever comes first on the alphabet
+	 * is better
 	 * 
 	 * @param other: other archeologist to compare to
 	 * @pre other != null
 	 * @return true if the other one is better, otherwise it is false
 	 */
-	public boolean isBehind(Archeologist other){
-		if(!this.hasLicense()) {
+	public boolean isBehind(Archeologist other) {
+		// This arch is worse than the other
+		if (!this.hasLicense())
 			return true;
-		}
-		if(!other.hasLicense()) {
+
+		// This arch is better than the other
+		if (!other.hasLicense())
 			return false;
-		}
-		if(merit < other.getMerit()){
+
+		// This arch is worse than the other
+		if (merit < other.getMerit())
 			return true;
-		}
-		else if(merit > other.getMerit()){
+		// This arch is better than the other
+		else if (merit > other.getMerit())
 			return false;
-		}
-		else{
-			if(numPenalties > other.getNumPenalties()){
-				return true;
-			}
-			else if(numPenalties < other.getNumPenalties()){
-				return false;
-			}
-			else{
-				return name.compareTo(other.getName()) > 0;
-			}
-		}
+		// This arch is worse than the other
+		else if (numPenalties > other.getNumPenalties())
+			return true;
+		// This arch is better than the other
+		else if (numPenalties < other.getNumPenalties())
+			return false;
+		// Whoever comes first on the alphabet is better
+		else
+			return name.compareTo(other.getName()) > 0;
 	}
 
 }

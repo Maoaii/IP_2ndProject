@@ -220,7 +220,7 @@ public class Contest_Manager {
 	private void updateScore(Team[] tmpTeams) {
 		for (int i = 1; i < size; i++) {
 			for (int j = size - 1; j >= i; j--) {
-				if (tmpTeams[j - 1].goesAfter(tmpTeams[j])) {
+				if (tmpTeams[j - 1].isBehind(tmpTeams[j])) {
 					Team tmp = tmpTeams[j - 1];
 					tmpTeams[j - 1] = tmpTeams[j];
 					tmpTeams[j] = tmp;

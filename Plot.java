@@ -1,8 +1,11 @@
 /**
+ * Class regarding a single Plot. Holds all its' information, like its' current treasure and how
+ * many times it has been dug up
  * 
- * @author
+ * @author Lucas Girotto and Pedro
  */
 public class Plot {
+	
 	// Instance variables
 	private int treasure;
 	private int timesDugUp;
@@ -19,8 +22,6 @@ public class Plot {
 	}
 
 	/**
-	 *gets the value of the treasure in this plot
-	 *
 	 * @return this plot's treasure
 	 */
 	public int getTreasure() {
@@ -28,8 +29,6 @@ public class Plot {
 	}
 
 	/**
-	 *Checks if this plot has been dug up
-	 *
 	 * @return true if plot has been dug up
 	 */
 	public boolean isDugUp() {
@@ -37,8 +36,6 @@ public class Plot {
 	}
 
 	/**
-	 *Checks how many times this plot has been dug up
-	 *
 	 * @return the amount of times this plot has been dug up
 	 */
 	public int getTimesDugUp() {
@@ -46,7 +43,7 @@ public class Plot {
 	}
 
 	/**
-	 * Marks this plot as dug up
+	 * Marks this plot as dug up and removes its' treasure
 	 */
 	public void excavate() {
 		timesDugUp++;

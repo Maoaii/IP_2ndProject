@@ -1,10 +1,13 @@
 /**
+ * Class regarding a single Team. Holds all its' information, like the team name, all the members
+ * and the next archeologist to excavate
  * 
- * @author
+ * @author Lucas Girotto and Pedro
  */
 public class Team {
+
 	// Constants
-	private static final int FIRST = 0;
+	private static final int FIRST_ARCH = 0;
 
 	// Instance variables
 	private Archeologist[] members;
@@ -21,9 +24,7 @@ public class Team {
 	public Team(Archeologist[] members, String name) {
 		this.members = members;
 		teamName = name;
-		for (int i = 0; i < members.length; i++) {
-		}
-		currentArchIndex = FIRST;
+		currentArchIndex = FIRST_ARCH;
 	}
 
 	/**
@@ -34,20 +35,20 @@ public class Team {
 	 */
 	public Archeologist getCurrentArch() {
 		Archeologist arch;
+
 		do {
 			arch = members[currentArchIndex];
-			if (currentArchIndex < members.length - 1) {
+
+			if (currentArchIndex < members.length - 1)
 				currentArchIndex++;
-			} else {
-				currentArchIndex = FIRST;
-			}
+			else
+				currentArchIndex = FIRST_ARCH;
 		} while (!arch.hasLicense());
+
 		return arch;
 	}
 
 	/**
-	 * gets the team's name
-	 *
 	 * @return the team's name
 	 */
 	public String getName() {
@@ -55,8 +56,6 @@ public class Team {
 	}
 
 	/**
-	 * gets the number of archeologists that still have a license
-	 *
 	 * @return the number of archeologists with a valid license
 	 */
 	public int getNumArchLicensed() {
@@ -64,44 +63,47 @@ public class Team {
 	}
 
 	/**
-	 * gets the number of archeologists that have lost their license
-	 *
 	 * @return the total of archeologists without a license on this team
 	 */
 	public int getNumArchNotLicensed() {
 		int total = 0;
+
 		for (int member = 0; member < members.length; member++) {
-			if (!members[member].hasLicense()) {
+			if (!members[member].hasLicense())
 				total++;
-			}
 		}
+
 		return total;
 	}
 
 	/**
-	 * Checks who is this team's star, base on his merit, his penalties and his name
+	 * Checks who is this team's star, base on merit, penalties and name
 	 * 
 	 * @return the name of this team's star
 	 */
 	public String getTeamStar() {
-		
+
 		Archeologist[] sortedMembers = new Archeologist[members.length];
-		
+
 		for (int member = 0; member < members.length; member++) {
 			sortedMembers[member] = members[member];
 		}
-		sortMembers(sortedMembers);
-		return sortedMembers[FIRST].getName();
+
+		sortMembers(sortedMembers); // Sort members from best to worst
+
+		return sortedMembers[FIRST_ARCH].getName();
 	}
 
 	/**
 	 * Sorts the team members based on merit, penalties and name
 	 * 
-	 * @return a sorted archeologist array
+	 * @param sortedMembers: team members to be sorted
+	 * @pre sortedMembers != null
 	 */
 	private void sortMembers(Archeologist[] sortedMembers) {
 		for (int i = 1; i < members.length; i++) {
 			for (int j = members.length - 1; j >= i; j--) {
+				// If and arch is worse than the one in front, switch their places
 				if (sortedMembers[j - 1].isBehind(sortedMembers[j])) {
 					Archeologist tmp = sortedMembers[j - 1];
 					sortedMembers[j - 1] = sortedMembers[j];
@@ -118,38 +120,43 @@ public class Team {
 	 */
 	public int getScore() {
 		int score = 0;
+
 		for (int member = 0; member < members.length; member++) {
 			score += members[member].getMerit();
 		}
+
 		return score;
 	}
 
 	/**
-	 * Compares this team's score, number of licensed/not licensed archeologists
+	 * Compares this team's score, number of licensed/not licensed archeologists and name to another
+	 * team
 	 * 
 	 * @param other: other team to compare to
 	 * @pre other != null
 	 * @return true if this team needs to be sorted lower than the other
 	 */
-	public boolean goesAfter(Team other) {
-		if (getScore() < other.getScore()) {
+	public boolean isBehind(Team other) {
+		// This team is lower than the other
+		if (getScore() < other.getScore())
 			return true;
-		} else if (getScore() > other.getScore()) {
+		// This team is higher than the other
+		else if (getScore() > other.getScore())
 			return false;
-		} else {
-			if (getNumArchNotLicensed() > other.getNumArchNotLicensed()) {
-				return true;
-			} else if (getNumArchNotLicensed() < other.getNumArchNotLicensed()) {
-				return false;
-			} else {
-				if (getNumArchLicensed() > other.getNumArchLicensed()) {
-					return true;
-				} else if (getNumArchLicensed() < other.getNumArchLicensed()) {
-					return false;
-				} else {
-					return getName().compareTo(other.getName()) > 0;
-				}
-			}
-		}
+		// This team is lower than the other
+		else if (getNumArchNotLicensed() > other.getNumArchNotLicensed())
+			return true;
+		// This team is higher than the other
+		else if (getNumArchNotLicensed() < other.getNumArchNotLicensed())
+			return false;
+		// This team is lower than the other
+		else if (getNumArchLicensed() > other.getNumArchLicensed())
+			return true;
+		// This team is higher than the other
+		else if (getNumArchLicensed() < other.getNumArchLicensed())
+			return false;
+		// Whoever comes first on the alphabet higher
+		else
+			return getName().compareTo(other.getName()) > 0;
 	}
 }

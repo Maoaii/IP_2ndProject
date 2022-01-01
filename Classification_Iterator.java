@@ -1,9 +1,11 @@
 /**
+ * Iterator desgined to cycle through the teams on the contest
  * 
- * @author lucas
- *
+ * @author Lucas Girotto and Pedro
  */
 public class Classification_Iterator {
+
+	// Instance variables
 	private Team[] teams;
 	private int size;
 	private int index;
@@ -22,7 +24,7 @@ public class Classification_Iterator {
 	}
 
 	/**
-	 *Checks if there is there are other teams left on the array
+	 * Checks if there is there are other teams left on the array
 	 *
 	 * @return true if there is more teams to iterate over
 	 */
@@ -31,7 +33,7 @@ public class Classification_Iterator {
 	}
 
 	/**
-	 *Gets the next team on the array
+	 * Gets the next team on the array
 	 *
 	 * @return the next team to be iterated over
 	 */

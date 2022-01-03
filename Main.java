@@ -2,8 +2,9 @@ import java.util.Scanner;
 import java.io.*;
 
 /**
+ * Main class. Handles all the input and output of information
  * 
- * @author
+ * @author Lucas Girotto and Pedro
  */
 public class Main {
 	// Constants
@@ -132,7 +133,9 @@ public class Main {
 			System.out.println(ALL_TEAMS_DISQUALIFIED);
 			return;
 		}
+
 		Classification_Iterator it = manager.scoreIterator();
+
 		while (it.hasNext()) {
 			Team team = it.next();
 			String name = team.getName();
@@ -153,6 +156,7 @@ public class Main {
 	 */
 	private static void handleStarCommand(Contest_Manager manager, Scanner in) {
 		String teamName = in.nextLine().trim();
+
 		if (manager.doesTeamExist(teamName))
 			System.out.printf(STAR_MESSAGE, teamName, manager.computeTeamStar(teamName));
 		else
@@ -263,6 +267,7 @@ public class Main {
 	 * Reads and returns an int from the console
 	 * 
 	 * @param in: console input reader
+	 * @pre in != null
 	 * @return an int read from console
 	 */
 	private static int readInt(Scanner in) {

@@ -1,6 +1,7 @@
 /**
+ * System class. Handles all the logic regarding this program
  * 
- * @author
+ * @author Lucas Girotto and Pedro
  */
 public class Contest_Manager {
 	// Constants
@@ -19,11 +20,11 @@ public class Contest_Manager {
 	 * @pre terrain != null
 	 */
 	public Contest_Manager(int[][] terrain) {
-		int lines = terrain.length;
+		int rows = terrain.length;
 		int cols = terrain[0].length;
-		plots = new Plot[lines][cols];
+		plots = new Plot[rows][cols];
 
-		for (int row = 0; row < lines; row++) {
+		for (int row = 0; row < rows; row++) {
 			for (int col = 0; col < cols; col++) {
 				plots[row][col] = new Plot(terrain[row][col]);
 			}
@@ -38,13 +39,15 @@ public class Contest_Manager {
 	 * 
 	 * @param teamName:    the name that describes the team
 	 * @param memberNames: an array that displays each member's name
-	 * @pre teamName != null && memberName != null
+	 * @pre teamName != null && memberNames != null
 	 */
 	public void addTeam(String teamName, String[] memberNames) {
 		Archeologist[] members = new Archeologist[memberNames.length];
-		for (int i = 0; i < members.length; i++) {
-			members[i] = new Archeologist(memberNames[i]);
+
+		for (int member = 0; member < size; member++) {
+			members[member] = new Archeologist(memberNames[member]);
 		}
+
 		teams[size] = new Team(members, teamName);
 		size++;
 	}
@@ -64,13 +67,14 @@ public class Contest_Manager {
 				sumTreasures += plots[row][col].getTreasure();
 			}
 		}
+
 		return sumTreasures;
 	}
 
 	/**
 	 * Computes the logic behind printing the current state of the terrain
 	 * 
-	 * @return a boolean matriz with the current state of the terrain
+	 * @return a boolean matrix with the current state of the terrain
 	 */
 	public boolean[][] getTerrain() {
 		int rows = plots.length;
@@ -102,7 +106,7 @@ public class Contest_Manager {
 	}
 
 	/**
-	 * * Computes the excavation of an archeologist
+	 * Computes the excavation of an archeologist
 	 * 
 	 * @param leapY:    archeologist movement on Y-axis
 	 * @param leapX:    archeologist movement on X-axis
@@ -110,83 +114,117 @@ public class Contest_Manager {
 	 * @pre leapY != null && leapX != null && teamName != null
 	 */
 	public void computeExcavation(int leapY, int leapX, String teamName) {
-
 		// Check which archeologist will make the excavation
-		// Based on order in team and license
 		Archeologist arch = teams[getTeamIndex(teamName)].getCurrentArch();
 
-		// Compute the excavation
-
-		// If arch gets out of the terrain
-			// Lose license
-		if (isOutOfBounds(leapY, leapX, arch)) {
-			arch.removeLicense();
-			
-			if(teams[getTeamIndex(teamName)].getNumArchLicensed() == 0) {
-				removeTeam(teamName);
-			}
-			
-		}
-		else {
-			// Update position
-			arch.updateXPos(leapX);
-			arch.updateYPos(leapY);
-			
-			// Get plot the arch landed on
-			Plot landedPlot = plots[arch.getPosY()][arch.getPosX()];
-			
-			// If is inside terrain and has been excavated
-				// Lose merit based on how many times plot has been excavated
-			if (landedPlot.isDugUp()) {
-				arch.removeMerit(PENALTY * landedPlot.getTimesDugUp());
-				landedPlot.excavate();
-			}
-				
-			// If is inside terrain and has not been excavated
-				// Gain merit based on treasure on plot
-			else {
-				arch.addMerit(landedPlot.getTreasure());
-				landedPlot.excavate();
-			}
-		}	
+		if (isOutOfBounds(leapY, leapX, arch))
+			computeOutOfBounds(arch, teamName);
+		else
+			excavate(arch, leapX, leapY);
 	}
-	
+
+	/**
+	 * Removes archeologist's license and removes team from contest if it doesn't have licensed
+	 * archs
+	 * 
+	 * @param arch:     archeologist to lose license
+	 * @param teamName: team to check for licensed archs
+	 * @pre arch != null && teamName != null
+	 */
+	private void computeOutOfBounds(Archeologist arch, String teamName) {
+
+		arch.removeLicense();
+
+		// If team doesn't have any licensed arch, remove team from contest
+		if (teams[getTeamIndex(teamName)].getNumArchLicensed() == 0)
+			removeTeam(teamName);
+	}
+
+	/**
+	 * Handles the logic behind an excavation
+	 * 
+	 * @param arch:  archeologist that'll excavate
+	 * @param leapX: arch movement on x-axis
+	 * @param leapY: arch movement on y-axis
+	 * @pre arch != null && leapX != null && leapY != null
+	 */
+	private void excavate(Archeologist arch, int leapX, int leapY) {
+		// Update position
+		arch.updateXPos(leapX);
+		arch.updateYPos(leapY);
+
+		// Get plot the arch landed on
+		Plot landedPlot = plots[arch.getPosY()][arch.getPosX()];
+
+		// If is inside terrain and has been excavated
+		// Lose merit based on how many times plot has been excavated
+		if (landedPlot.isDugUp()) {
+			arch.removeMerit(PENALTY * landedPlot.getTimesDugUp());
+			landedPlot.excavate();
+		}
+
+		// If is inside terrain and has not been excavated
+		// Gain merit based on treasure on plot
+		else {
+			arch.addMerit(landedPlot.getTreasure());
+			landedPlot.excavate();
+		}
+	}
+
+	/**
+	 * Removes a team from the contest
+	 * 
+	 * @param teamName: name of the team to be removed
+	 * @pre teamName != null
+	 */
 	private void removeTeam(String teamName) {
 		int removedIndex = getTeamIndex(teamName);
+
 		for (int index = removedIndex; index < size - 1; index++) {
 			teams[index] = teams[index + 1];
 		}
-		size--;
-		
-		
-	}
-	
 
+		size--;
+	}
+
+	/**
+	 * Checks if the arch will be out of bound after the movement
+	 * 
+	 * @param leapY: leap on y-axis
+	 * @param leapX: leap on x-axis
+	 * @param arch:  archeologist that'll make the leap
+	 * @pre leapY != null && leapX != null && arch != null
+	 * @return true if archeologist is out of bounds
+	 */
 	private boolean isOutOfBounds(int leapY, int leapX, Archeologist arch) {
 		int cols = plots[0].length;
 		int rows = plots.length;
-		
+
 		if (arch.getPosX() + leapX >= cols || arch.getPosX() + leapX < 0
 				|| arch.getPosY() + leapY >= rows || arch.getPosY() + leapY < 0)
 			return true;
-		
+
 		return false;
 	}
 
 	/**
+	 * Gets the index of the team with "teamName"
+	 * 
 	 * @param teamName: name of the team to look for
-	 * @pre doesTeamExist()
+	 * @pre doesTeamExist() && teamName != null
 	 * @return the index of the team
 	 */
 	private int getTeamIndex(String teamName) {
 		int teamIndex = 0;
 		boolean found = false;
+
 		while (!found && teamIndex < size) {
 			if (teams[teamIndex].getName().equals(teamName))
 				found = true;
 			else
 				teamIndex++;
 		}
+
 		return teamIndex;
 	}
 
@@ -215,9 +253,12 @@ public class Contest_Manager {
 	}
 
 	/**
-	 * Sorts the teams based on their score
+	 * Sorts the teams based on their score, licensed/not licensed archeologists and name
+	 * 
+	 * @param tmpTeams: team to be sorted
+	 * @pre tmpTeams != null
 	 */
-	private void updateScore(Team[] tmpTeams) {
+	private void sortTeams(Team[] tmpTeams) {
 		for (int i = 1; i < size; i++) {
 			for (int j = size - 1; j >= i; j--) {
 				if (tmpTeams[j - 1].isBehind(tmpTeams[j])) {
@@ -236,10 +277,12 @@ public class Contest_Manager {
 	 */
 	public Classification_Iterator scoreIterator() {
 		Team[] tmpTeams = new Team[MAX_NUM_OF_TEAMS];
+
 		for (int team = 0; team < size; team++) {
 			tmpTeams[team] = teams[team];
 		}
-		updateScore(tmpTeams);
+
+		sortTeams(tmpTeams);
 		return new Classification_Iterator(tmpTeams, size);
 	}
 

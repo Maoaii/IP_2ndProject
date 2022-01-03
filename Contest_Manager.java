@@ -44,7 +44,7 @@ public class Contest_Manager {
 	public void addTeam(String teamName, String[] memberNames) {
 		Archeologist[] members = new Archeologist[memberNames.length];
 
-		for (int member = 0; member < size; member++) {
+		for (int member = 0; member < members.length; member++) {
 			members[member] = new Archeologist(memberNames[member]);
 		}
 

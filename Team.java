@@ -2,7 +2,7 @@
  * Class regarding a single Team. Holds all its' information, like the team name, all the members
  * and the next archeologist to excavate
  * 
- * @author Lucas Girotto and Pedro
+ * @author Lucas Girotto and Pedro Afonso
  */
 public class Team {
 

@@ -1,10 +1,13 @@
 import java.util.Scanner;
 import java.io.*;
 
+//perguntar sobre binary search vs. bubble sort
+//perguntar sobre comentários de métodos do tipo getThis();
+
 /**
  * Main class. Handles all the input and output of information
  * 
- * @author Lucas Girotto and Pedro
+ * @author Lucas Girotto and Pedro Afonso
  */
 public class Main {
 	// Constants

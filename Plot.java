@@ -2,7 +2,7 @@
  * Class regarding a single Plot. Holds all its' information, like its' current treasure and how
  * many times it has been dug up
  * 
- * @author Lucas Girotto and Pedro
+ * @author Lucas Girotto and Pedro Afonso
  */
 public class Plot {
 	

@@ -1,7 +1,7 @@
 /**
  * Iterator desgined to cycle through the teams on the contest
  * 
- * @author Lucas Girotto and Pedro
+ * @author Lucas Girotto and Pedro Afonso
  */
 public class Classification_Iterator {
 

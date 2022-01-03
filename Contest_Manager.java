@@ -1,7 +1,7 @@
 /**
  * System class. Handles all the logic regarding this program
  * 
- * @author Lucas Girotto and Pedro
+ * @author Lucas Girotto and Pedro Afonso
  */
 public class Contest_Manager {
 	// Constants

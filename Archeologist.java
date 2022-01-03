@@ -2,7 +2,7 @@
  * Class regarding a single Archeologist. Holds all its' information, like current position, merit,
  * number of penalties, license and name
  * 
- * @author Lucas Girotto and Pedro
+ * @author Lucas Girotto and Pedro Afonso
  */
 public class Archeologist {
 

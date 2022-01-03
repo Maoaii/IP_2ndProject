@@ -111,7 +111,7 @@ public class Contest_Manager {
 	 * @param leapY:    archeologist movement on Y-axis
 	 * @param leapX:    archeologist movement on X-axis
 	 * @param teamName: name of the team that'll excavate
-	 * @pre leapY != null && leapX != null && teamName != null
+	 * @pre leapY != 0 && leapX != 0 && teamName != null
 	 */
 	public void computeExcavation(int leapY, int leapX, String teamName) {
 		// Check which archeologist will make the excavation
@@ -132,7 +132,6 @@ public class Contest_Manager {
 	 * @pre arch != null && teamName != null
 	 */
 	private void computeOutOfBounds(Archeologist arch, String teamName) {
-
 		arch.removeLicense();
 
 		// If team doesn't have any licensed arch, remove team from contest
@@ -146,7 +145,7 @@ public class Contest_Manager {
 	 * @param arch:  archeologist that'll excavate
 	 * @param leapX: arch movement on x-axis
 	 * @param leapY: arch movement on y-axis
-	 * @pre arch != null && leapX != null && leapY != null
+	 * @pre arch != null
 	 */
 	private void excavate(Archeologist arch, int leapX, int leapY) {
 		// Update position
@@ -193,18 +192,19 @@ public class Contest_Manager {
 	 * @param leapY: leap on y-axis
 	 * @param leapX: leap on x-axis
 	 * @param arch:  archeologist that'll make the leap
-	 * @pre leapY != null && leapX != null && arch != null
+	 * @pre arch != null
 	 * @return true if archeologist is out of bounds
 	 */
 	private boolean isOutOfBounds(int leapY, int leapX, Archeologist arch) {
 		int cols = plots[0].length;
 		int rows = plots.length;
 
-		if (arch.getPosX() + leapX >= cols || arch.getPosX() + leapX < 0
-				|| arch.getPosY() + leapY >= rows || arch.getPosY() + leapY < 0)
-			return true;
+		boolean outOnRight = arch.getPosX() + leapX >= cols;
+		boolean outOnLeft = arch.getPosX() + leapX < 0;
+		boolean outOnTop = arch.getPosY() + leapY < 0;
+		boolean outOnBottom = arch.getPosY() + leapY >= rows;
 
-		return false;
+		return outOnRight || outOnLeft || outOnBottom || outOnTop;
 	}
 
 	/**
@@ -285,5 +285,4 @@ public class Contest_Manager {
 		sortTeams(tmpTeams);
 		return new Classification_Iterator(tmpTeams, size);
 	}
-
 }

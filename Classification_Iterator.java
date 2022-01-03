@@ -1,5 +1,5 @@
 /**
- * Iterator desgined to cycle through the teams on the contest
+ * Iterator designed to cycle through the teams on the contest
  * 
  * @author Lucas Girotto and Pedro Afonso
  */
@@ -15,7 +15,7 @@ public class Classification_Iterator {
 	 * 
 	 * @param teams: array of teams in contest
 	 * @param size:  number of teams in contest
-	 * @pre teams != null && size != null
+	 * @pre teams != null && size >= 0
 	 */
 	public Classification_Iterator(Team[] teams, int size) {
 		this.teams = teams;
@@ -36,6 +36,7 @@ public class Classification_Iterator {
 	 * Gets the next team on the array
 	 *
 	 * @return the next team to be iterated over
+	 * @pre hasNext()
 	 */
 	public Team next() {
 		return teams[index++];

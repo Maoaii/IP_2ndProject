@@ -1,15 +1,13 @@
 import java.util.Scanner;
 import java.io.*;
 
-//perguntar sobre binary search vs. bubble sort
-//perguntar sobre comentários de métodos do tipo getThis();
-
 /**
  * Main class. Handles all the input and output of information
  * 
  * @author Lucas Girotto and Pedro Afonso
  */
 public class Main {
+
 	// Constants
 	// File name
 	private static final String FILENAME = "teams.txt";
@@ -44,7 +42,7 @@ public class Main {
 		Contest_Manager manager = new Contest_Manager(readTerrain(in));
 
 		// Adds teams to the contest
-		addTeams(in, file, manager);
+		addAllTeams(in, file, manager);
 
 		// Start the contest loop
 		String command;
@@ -146,7 +144,6 @@ public class Main {
 			int nNotLic = team.getNumArchNotLicensed();
 			int nLic = team.getNumArchLicensed();
 			System.out.printf(CLASSIFICATION_MESSAGE, name, score, nNotLic, nLic);
-
 		}
 	}
 
@@ -234,35 +231,61 @@ public class Main {
 	/**
 	 * Reads the teams the user wants to add to the contest and adds them
 	 *
-	 * @param in:     console input reader
-	 * @param file:   file reader
-	 * @param manager system that handles the logic
+	 * @param in:      console input reader
+	 * @param file:    file reader
+	 * @param manager: system that handles the logic
 	 * @pre in != null && file != null && manager != null
 	 */
-	private static void addTeams(Scanner in, Scanner file, Contest_Manager manager) {
+	private static void addAllTeams(Scanner in, Scanner file, Contest_Manager manager) {
 		int numTeams = readInt(in);
 		int[] teams = new int[numTeams];
+
 		for (int index = 0; index < numTeams; index++) {
 			teams[index] = in.nextInt();
 		}
 		in.nextLine();
+
 		int limit = teams[numTeams - 1];
 		int arrayIndex = 0;
 		for (int numTeam = 1; numTeam <= limit; numTeam++) {
 			int numMembers = readInt(file);
 			if (numTeam == teams[arrayIndex]) {
-				String teamName = file.nextLine().trim();
-				String[] memberNames = new String[numMembers];
-				for (int member = 0; member < numMembers; member++) {
-					memberNames[member] = file.nextLine().trim();
-				}
-				manager.addTeam(teamName, memberNames);
+				addTeam(file, manager, numMembers);
 				arrayIndex++;
-			} else {
-				for (int index = 0; index < numMembers + 1; index++) {
-					file.nextLine();
-				}
-			}
+			} else
+				skipLines(file, numMembers + 1); // Skips team members and team name from file
+		}
+	}
+
+	/**
+	 * Adds the next team from the file to the contest
+	 *
+	 * @param file:       file reader
+	 * @param manager:    system that handles the logic
+	 * @param numMembers: number of members to be added to the team
+	 * @pre file != null && manager != null && numMembers > 0
+	 */
+	private static void addTeam(Scanner file, Contest_Manager manager, int numMembers) {
+		String teamName = file.nextLine().trim();
+		String[] memberNames = new String[numMembers];
+
+		for (int member = 0; member < numMembers; member++) {
+			memberNames[member] = file.nextLine().trim();
+		}
+
+		manager.addTeam(teamName, memberNames);
+	}
+
+	/**
+	 * Skips a certain team from the file
+	 *
+	 * @param file:  file reader
+	 * @param lines: the amount of lines to be skipped
+	 * @pre file != null && lines > 0 
+	 */
+	private static void skipLines(Scanner file, int lines) {
+		for (int index = 0; index < lines; index++) {
+			file.nextLine();
 		}
 	}
 

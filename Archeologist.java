@@ -38,7 +38,6 @@ public class Archeologist {
 	 * Updates archeologist's position in the x-axis
 	 * 
 	 * @param leap: leap archeologist makes
-	 * @leap != null
 	 */
 	public void updateXPos(int leap) {
 		posX += leap;
@@ -48,7 +47,6 @@ public class Archeologist {
 	 * Updates the archeologist's position in the y-axis
 	 * 
 	 * @param leap: leap archeologist makes
-	 * @pre leap != null
 	 */
 	public void updateYPos(int leap) {
 		posY += leap;
@@ -72,7 +70,7 @@ public class Archeologist {
 	 * Adds merit to archeologist
 	 * 
 	 * @param value: value to be added to archeologist
-	 * @pre value != null
+	 * @pre value > 0
 	 */
 	public void addMerit(int value) {
 		merit += value;
@@ -82,7 +80,7 @@ public class Archeologist {
 	 * Removes merit from Archeologist
 	 * 
 	 * @param meritLoss to be subtracted from archeologists merit
-	 * @pre meritLoss != null
+	 * @pre meritLoss > 0
 	 */
 	public void removeMerit(int meritLoss) {
 		merit -= meritLoss;
@@ -162,5 +160,4 @@ public class Archeologist {
 		else
 			return name.compareTo(other.getName()) > 0;
 	}
-
 }
